@@ -1,0 +1,35 @@
+﻿
+    @if (User.Identity.IsAuthenticated)
+    {
+        <li><a href="#"><i class="fa fa-user"></i><span>  </span><label>خوش آمدید!</label></a></li>
+        <li><a href="/Account/Logout"><i class="fa fa-sign-out"></i><span>  </span><label>خروج</label></a></li>
+    }
+    else
+    {
+
+        <li><a href="Register">ثبت نام در سایت</a></li>
+        <li><a href="/Login">ورود</a></li>
+
+    }
+
+
+    @*
+
+            <span class="login-btn uppercase">ورود</span>
+            <div class="login-form-wrap bg-white">
+                <form class="zm-signin-form text-right">
+                    <input type="text" class="zm-form-control username" placeholder="نام کاربری یا ایمیل">
+                    <input type="password" class="zm-form-control password" placeholder="رمز عبور">
+                    <input type="checkbox" value=" Remember Me" class="remember"> مرا به خاطر بسپار<br>
+                    <div class="zm-submit-box clearfix  mt-20">
+                        <input type="submit" value="ورود">
+                        <a href="/Register">ثبت نام</a>
+                    </div>
+                    <a href="#" class="zm-forget">نام کاربری یا رمز عبورتان را فراموش کرده اید ؟</a>
+                    <div class="zm-login-social-box">
+                        <a href="#" class="social-btn bg-facebook block"><span class="btn_text"><i class="fa fa-facebook"></i>ورود با فیس بوک</span></a>
+                        <a href="#" class="social-btn bg-twitter block"><span class="btn_text"><i class="fa fa-twitter"></i>ورود با توییتر</span></a>
+                    </div>
+                </form>
+            </div>
+        </div>*@

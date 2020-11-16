@@ -1,0 +1,59 @@
+﻿@model DataLayer.LoginViewModel
+
+@{
+    ViewBag.Title = "ورود به سایت خبری";
+    Layout = "~/Views/Shared/_DefualtCmsLayout.cshtml";
+}
+
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <div class="container">
+            @if(User.Identity.IsAuthenticated && Request.QueryString["ReturnUrl"] != null)
+            {
+                <div class="alert alert-danger">
+                    <p>شما مجوز ورود به بخش درخواست شده را ندارید</p>
+                </div>
+            }
+        <h4 id="h4r">ورود به سایت</h4>
+        <hr id="hrr"/>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-offset-1" })
+            <div class="col-md-11">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-offset-1" })
+            <div class="col-md-11">
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.RememberMi, htmlAttributes: new { @class = "control-label col-offset-1" })
+            <div class="col-md-11">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.RememberMi)
+                    @Html.ValidationMessageFor(model => model.RememberMi, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class=" col-md-11">
+                <input type="submit" value="ورود به سایت" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+        </div>
+}
+

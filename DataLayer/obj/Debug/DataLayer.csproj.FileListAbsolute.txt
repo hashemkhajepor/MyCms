@@ -1,0 +1,12 @@
+E:\MyCms\MyCms\DataLayer\bin\Debug\DataLayer.dll.config
+E:\MyCms\MyCms\DataLayer\bin\Debug\DataLayer.dll
+E:\MyCms\MyCms\DataLayer\bin\Debug\DataLayer.pdb
+E:\MyCms\MyCms\DataLayer\bin\Debug\EntityFramework.dll
+E:\MyCms\MyCms\DataLayer\bin\Debug\EntityFramework.SqlServer.dll
+E:\MyCms\MyCms\DataLayer\bin\Debug\EntityFramework.xml
+E:\MyCms\MyCms\DataLayer\bin\Debug\EntityFramework.SqlServer.xml
+E:\MyCms\MyCms\DataLayer\obj\Debug\DataLayer.csprojAssemblyReference.cache
+E:\MyCms\MyCms\DataLayer\obj\Debug\DataLayer.csproj.CoreCompileInputs.cache
+E:\MyCms\MyCms\DataLayer\obj\Debug\DataLayer.csproj.CopyComplete
+E:\MyCms\MyCms\DataLayer\obj\Debug\DataLayer.dll
+E:\MyCms\MyCms\DataLayer\obj\Debug\DataLayer.pdb
