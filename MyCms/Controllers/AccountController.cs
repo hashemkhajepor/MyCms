@@ -98,5 +98,57 @@ namespace MyCms.Controllers
             FormsAuthentication.SignOut();
             return Redirect("/");
         }
+        [Route("forgotPassword")]
+        public ActionResult forgotPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        [Route("forgotPassword")]
+
+        public ActionResult forgotPassword(ForgotPasswordViewModel forgot)
+        {
+            var user = db.UsersRepository.Get(u => u.Email == forgot.Email).SingleOrDefault();
+            if(user != null)
+            {
+                if (user.IsActive)
+                {
+                    string body = PartialToStringClass.RenderPartialView("ManageEmails", "RecoveryPassword", user);
+                    SendEmail.Send(user.Email, "بازیابی کلمه عبور", body);
+                    return View("SuccessForgotPassword", user);
+                }
+                else
+                {
+                    ModelState.AddModelError("Email", "حساب کاربری شما فعال نیست");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("Email", "کاربری یافت نشد");
+            }
+            return View();
+        }
+
+        public ActionResult RecoveryPassword(string id)
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult RecoveryPassword(string id , RecoveryPasswordViewModel recovery)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = db.UsersRepository.Get(u => u.ActiveCode == id).SingleOrDefault();
+                if(user == null)
+                {
+                    return HttpNotFound();
+                }
+                user.Password = FormsAuthentication.HashPasswordForStoringInConfigFile(recovery.Password, "MD5");
+                user.ActiveCode = Guid.NewGuid().ToString();
+                db.Save();
+                return Redirect("/Login?recovery=true");
+            }
+            return View();
+        }
     }
 }
