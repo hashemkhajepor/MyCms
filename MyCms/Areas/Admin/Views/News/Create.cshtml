@@ -1,0 +1,145 @@
+﻿@using DataLayer;
+@model DataLayer.News
+
+@{
+    ViewBag.Title = "افزودن خبر";
+    Layout = "~/Areas/Admin/Views/Shared/_MyCmsAdminLayout.cshtml";
+}
+
+<div class="row">
+
+    @using (Html.BeginForm("Create","News",FormMethod.Post,new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+
+        <div class="form-horizontal">
+            <h4 id="h4r">خبر جدید</h4>
+            <hr id="hrr" />
+            @if(ViewBag.ErrorSelectedGroup == true)
+            {
+                <div class="alert alert-danger">
+                    لطفا گروه های خبر را انتخاب کنید.
+                </div>
+            }
+        <div class="col-md-8">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ShortDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ShortDescription, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ShortDescription, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Text, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Text, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Text, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <span class="control-label col-md-2">کلمات کلیدی</span>
+               <div class="col-md-10">
+                   <input type="text" name="tags" class="form-control" placeholder="کلمات کلیدی را با , از هم جدا کنید." />
+               </div>
+                
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="ثبت خبر" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+            <div class="col-md-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">تصویر اصلی خبر</div>
+                    <div class="panel-body">
+                        <img src="~/Images/NewsImage/NoPhoto.jpg" alt="nophoto" class="thumbnail" style="margin:8px auto" id="imagePriviewNews"/>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <label for="files" class="btn btn-success">افزودن تصویر</label>
+                                <input type="file" id="files" style="visibility:hidden" />
+                                @Html.ValidationMessageFor(model => model.ImageName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        گروه های خبر
+                    </div>
+                    <div class="panel-body">
+                        @{ 
+                            List<News_Groups> groups = ViewBag.groups;
+                            <ul>
+                                @foreach(var group in groups.Where(g=>g.ParentID == null))
+                                {
+                                    <li>
+                                        <input type="checkbox" name="selectedGroups" value="@group.GroupID" /><span> @group.GroupTitle</span>
+                                        @if (groups.Any(g =>g.ParentID == group.GroupID))
+                                        {
+                                            <ul>
+                                                @foreach(var subgroup in groups.Where(p=>p.ParentID == group.GroupID))
+                                                {
+                                                    <li>
+                                                        <input type="checkbox"  name="selectedGroups" value="@subgroup.GroupID" /><span>@subgroup.GroupTitle</span>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+                            }
+</div>
+<div>
+    @Html.ActionLink("بازگشت به لیست", "Index")
+</div>
+
+@section Scripts{
+    <script src="~/ckeditor/ckeditor.js"></script>
+    <script src="~/ckeditor/adapters/jquery.js"></script>
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imagePriviewNews').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+
+        $("#files").change(function () {
+            readURL(this);
+        });
+    </script>
+    <script>
+        $(function () {
+            $('#Text').ckeditor();
+        });
+    </script>
+}

@@ -1,0 +1,65 @@
+﻿
+
+@{
+    ViewBag.Title = "گروه های خبری";
+    Layout = "~/Areas/Admin/Views/Shared/_MyCmsAdminLayout.cshtml";
+}
+
+
+
+<p>
+    <a onclick="Create()" class="btn btn-primary">افزودن گروه جدید</a>
+</p>
+
+<div id="ListGroups">
+    @Html.Action("ListGroup")
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body" id="myModalbody">
+                ...
+            </div>
+          
+        </div>
+    </div>
+</div>
+
+<script>
+    function Create() {
+        $.get("/Admin/News_Groups/Create", function (result) {
+            $("#myModal").modal();
+            $("#myModalLabel").html("افزودن گروه جدید");
+            $("#myModalbody").html(result);
+        });
+    }
+
+    function Edit(id) {
+        $.get("/Admin/News_Groups/Edit/" + id, function (result) {
+            $("#myModal").modal();
+            $("#myModalLabel").html("ویرایش گروه خبری");
+            $("#myModalbody").html(result);
+        });
+    }
+
+    function Delete(id) {
+        if (confirm("آیا از حذف مطمئن هستید؟")) {
+            $.get("/Admin/News_Groups/Delete/" + id, function () {
+                $("#group_" + id).hide("slow");
+            });
+        }
+        
+    }
+
+    function Success() {
+        $("#myModal").modal('hide');
+    }
+</script>

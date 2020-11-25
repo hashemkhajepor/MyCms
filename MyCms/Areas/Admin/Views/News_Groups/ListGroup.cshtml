@@ -1,0 +1,30 @@
+﻿@model IEnumerable<DataLayer.News_Groups>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.GroupTitle)
+        </th>
+        <th>
+            زیر گروه ها
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr id="group_@(item.GroupID)">
+            <td>
+                @Html.DisplayFor(modelItem => item.GroupTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.News_Groups2.GroupTitle)
+            </td>
+            <td>
+                <a onclick="Create()" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-plus"></i></a>
+                <a onclick="Edit(@item.GroupID)" class="btn btn-warning btn-xs"><i class="glyphicon glyphicon-edit"></i></a>
+                <a onclick="Delete(@item.GroupID)" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i></a>
+            </td>
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,47 @@
+﻿@model IEnumerable<DataLayer.News>
+
+@{
+    ViewBag.Title = "خبر ها";
+    Layout = "~/Areas/Admin/Views/Shared/_MyCmsAdminLayout.cshtml";
+}
+
+
+<p>
+    <a href="@Url.Action("Create")" class="btn btn-primary">افزودن خبر جدید</a>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+      
+        <th>
+            @Html.DisplayNameFor(model => model.ImageName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+      
+        <td>
+            <img src="/Images/NewsImage/Thumb/@item.ImageName" alt="NewsPhoto" />
+        </td>
+        <td>
+            @item.CreateDate.ToShamsi()
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.NewsID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.NewsID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.NewsID })
+        </td>
+    </tr>
+}
+
+</table>

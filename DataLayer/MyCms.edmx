@@ -4,7 +4,34 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MyCms_DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MyCms_DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="News">
+          <Key>
+            <PropertyRef Name="NewsID" />
+          </Key>
+          <Property Name="NewsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="ShortDescription" Type="nvarchar" MaxLength="550" Nullable="false" />
+          <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ImageName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="News_Groups">
+          <Key>
+            <PropertyRef Name="GroupID" />
+          </Key>
+          <Property Name="GroupID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GroupTitle" Type="nvarchar" MaxLength="400" Nullable="false" />
+          <Property Name="ParentID" Type="int" />
+        </EntityType>
+        <EntityType Name="News_Selected_Groups">
+          <Key>
+            <PropertyRef Name="NG_ID" />
+          </Key>
+          <Property Name="NG_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NewsID" Type="int" Nullable="false" />
+          <Property Name="GroupID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Roles">
           <Key>
             <PropertyRef Name="RoleID" />
@@ -12,6 +39,14 @@
           <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RoleTitle" Type="nvarchar" MaxLength="250" Nullable="false" />
           <Property Name="RoleName" Type="nvarchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tags">
+          <Key>
+            <PropertyRef Name="TagID" />
+          </Key>
+          <Property Name="TagID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NewsID" Type="int" Nullable="false" />
+          <Property Name="Tag" Type="nvarchar" MaxLength="250" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -26,6 +61,54 @@
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="RegisterDate" Type="datetime" Nullable="false" />
         </EntityType>
+        <Association Name="FK_News_Groups_News_Groups1">
+          <End Role="News_Groups" Type="Self.News_Groups" Multiplicity="0..1" />
+          <End Role="News_Groups1" Type="Self.News_Groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="News_Groups">
+              <PropertyRef Name="GroupID" />
+            </Principal>
+            <Dependent Role="News_Groups1">
+              <PropertyRef Name="ParentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_News_Selected_Groups_News">
+          <End Role="News" Type="Self.News" Multiplicity="1" />
+          <End Role="News_Selected_Groups" Type="Self.News_Selected_Groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="News">
+              <PropertyRef Name="NewsID" />
+            </Principal>
+            <Dependent Role="News_Selected_Groups">
+              <PropertyRef Name="NewsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_News_Selected_Groups_News_Groups">
+          <End Role="News_Groups" Type="Self.News_Groups" Multiplicity="1" />
+          <End Role="News_Selected_Groups" Type="Self.News_Selected_Groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="News_Groups">
+              <PropertyRef Name="GroupID" />
+            </Principal>
+            <Dependent Role="News_Selected_Groups">
+              <PropertyRef Name="GroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tags_News">
+          <End Role="News" Type="Self.News" Multiplicity="1" />
+          <End Role="Tags" Type="Self.Tags" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="News">
+              <PropertyRef Name="NewsID" />
+            </Principal>
+            <Dependent Role="Tags">
+              <PropertyRef Name="NewsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Users_Roles">
           <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
           <End Role="Users" Type="Self.Users" Multiplicity="*" />
@@ -39,15 +122,34 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="MyCms_DBModelStoreContainer">
+          <EntitySet Name="News" EntityType="Self.News" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="News_Groups" EntityType="Self.News_Groups" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="News_Selected_Groups" EntityType="Self.News_Selected_Groups" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tags" EntityType="Self.Tags" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_News_Groups_News_Groups1" Association="Self.FK_News_Groups_News_Groups1">
+            <End Role="News_Groups" EntitySet="News_Groups" />
+            <End Role="News_Groups1" EntitySet="News_Groups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_News_Selected_Groups_News" Association="Self.FK_News_Selected_Groups_News">
+            <End Role="News" EntitySet="News" />
+            <End Role="News_Selected_Groups" EntitySet="News_Selected_Groups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_News_Selected_Groups_News_Groups" Association="Self.FK_News_Selected_Groups_News_Groups">
+            <End Role="News_Groups" EntitySet="News_Groups" />
+            <End Role="News_Selected_Groups" EntitySet="News_Selected_Groups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tags_News" Association="Self.FK_Tags_News">
+            <End Role="News" EntitySet="News" />
+            <End Role="Tags" EntitySet="Tags" />
+          </AssociationSet>
           <AssociationSet Name="FK_Users_Roles" Association="Self.FK_Users_Roles">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MyCms_DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -93,7 +195,118 @@
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
+          <EntitySet Name="News_Groups" EntityType="MyCms_DBModel.News_Groups" />
+          <AssociationSet Name="FK_News_Groups_News_Groups1" Association="MyCms_DBModel.FK_News_Groups_News_Groups1">
+            <End Role="News_Groups" EntitySet="News_Groups" />
+            <End Role="News_Groups1" EntitySet="News_Groups" />
+          </AssociationSet>
+          <EntitySet Name="News" EntityType="MyCms_DBModel.News" />
+          <EntitySet Name="News_Selected_Groups" EntityType="MyCms_DBModel.News_Selected_Groups" />
+          <EntitySet Name="Tags" EntityType="MyCms_DBModel.Tags" />
+          <AssociationSet Name="FK_News_Selected_Groups_News" Association="MyCms_DBModel.FK_News_Selected_Groups_News">
+            <End Role="News" EntitySet="News" />
+            <End Role="News_Selected_Groups" EntitySet="News_Selected_Groups" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tags_News" Association="MyCms_DBModel.FK_Tags_News">
+            <End Role="News" EntitySet="News" />
+            <End Role="Tags" EntitySet="Tags" />
+          </AssociationSet>
+          <AssociationSet Name="FK_News_Selected_Groups_News_Groups" Association="MyCms_DBModel.FK_News_Selected_Groups_News_Groups">
+            <End Role="News_Groups" EntitySet="News_Groups" />
+            <End Role="News_Selected_Groups" EntitySet="News_Selected_Groups" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="News_Groups">
+          <Key>
+            <PropertyRef Name="GroupID" />
+          </Key>
+          <Property Name="GroupID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GroupTitle" Type="String" Nullable="false" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="ParentID" Type="Int32" />
+          <NavigationProperty Name="News_Groups1" Relationship="MyCms_DBModel.FK_News_Groups_News_Groups1" FromRole="News_Groups" ToRole="News_Groups1" />
+          <NavigationProperty Name="News_Groups2" Relationship="MyCms_DBModel.FK_News_Groups_News_Groups1" FromRole="News_Groups1" ToRole="News_Groups" />
+          <NavigationProperty Name="News_Selected_Groups" Relationship="MyCms_DBModel.FK_News_Selected_Groups_News_Groups" FromRole="News_Groups" ToRole="News_Selected_Groups" />
+        </EntityType>
+        <Association Name="FK_News_Groups_News_Groups1">
+          <End Type="MyCms_DBModel.News_Groups" Role="News_Groups" Multiplicity="0..1" />
+          <End Type="MyCms_DBModel.News_Groups" Role="News_Groups1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="News_Groups">
+              <PropertyRef Name="GroupID" />
+            </Principal>
+            <Dependent Role="News_Groups1">
+              <PropertyRef Name="ParentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="News">
+          <Key>
+            <PropertyRef Name="NewsID" />
+          </Key>
+          <Property Name="NewsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ShortDescription" Type="String" Nullable="false" MaxLength="550" FixedLength="false" Unicode="true" />
+          <Property Name="Text" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImageName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="News_Selected_Groups" Relationship="MyCms_DBModel.FK_News_Selected_Groups_News" FromRole="News" ToRole="News_Selected_Groups" />
+          <NavigationProperty Name="Tags" Relationship="MyCms_DBModel.FK_Tags_News" FromRole="News" ToRole="Tags" />
+        </EntityType>
+        <EntityType Name="News_Selected_Groups">
+          <Key>
+            <PropertyRef Name="NG_ID" />
+          </Key>
+          <Property Name="NG_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NewsID" Type="Int32" Nullable="false" />
+          <Property Name="GroupID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="News" Relationship="MyCms_DBModel.FK_News_Selected_Groups_News" FromRole="News_Selected_Groups" ToRole="News" />
+          <NavigationProperty Name="News_Groups" Relationship="MyCms_DBModel.FK_News_Selected_Groups_News_Groups" FromRole="News_Selected_Groups" ToRole="News_Groups" />
+        </EntityType>
+        <EntityType Name="Tags">
+          <Key>
+            <PropertyRef Name="TagID" />
+          </Key>
+          <Property Name="TagID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NewsID" Type="Int32" Nullable="false" />
+          <Property Name="Tag" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="News" Relationship="MyCms_DBModel.FK_Tags_News" FromRole="Tags" ToRole="News" />
+        </EntityType>
+        <Association Name="FK_News_Selected_Groups_News">
+          <End Type="MyCms_DBModel.News" Role="News" Multiplicity="1" />
+          <End Type="MyCms_DBModel.News_Selected_Groups" Role="News_Selected_Groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="News">
+              <PropertyRef Name="NewsID" />
+            </Principal>
+            <Dependent Role="News_Selected_Groups">
+              <PropertyRef Name="NewsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tags_News">
+          <End Type="MyCms_DBModel.News" Role="News" Multiplicity="1" />
+          <End Type="MyCms_DBModel.Tags" Role="Tags" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="News">
+              <PropertyRef Name="NewsID" />
+            </Principal>
+            <Dependent Role="Tags">
+              <PropertyRef Name="NewsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_News_Selected_Groups_News_Groups">
+          <End Type="MyCms_DBModel.News_Groups" Role="News_Groups" Multiplicity="1" />
+          <End Type="MyCms_DBModel.News_Selected_Groups" Role="News_Selected_Groups" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="News_Groups">
+              <PropertyRef Name="GroupID" />
+            </Principal>
+            <Dependent Role="News_Selected_Groups">
+              <PropertyRef Name="GroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -120,6 +333,45 @@
                 <ScalarProperty Name="ActiveCode" ColumnName="ActiveCode" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="News_Groups">
+            <EntityTypeMapping TypeName="MyCms_DBModel.News_Groups">
+              <MappingFragment StoreEntitySet="News_Groups">
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="GroupTitle" ColumnName="GroupTitle" />
+                <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="News">
+            <EntityTypeMapping TypeName="MyCms_DBModel.News">
+              <MappingFragment StoreEntitySet="News">
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="ImageName" ColumnName="ImageName" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="NewsID" ColumnName="NewsID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="News_Selected_Groups">
+            <EntityTypeMapping TypeName="MyCms_DBModel.News_Selected_Groups">
+              <MappingFragment StoreEntitySet="News_Selected_Groups">
+                <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+                <ScalarProperty Name="NewsID" ColumnName="NewsID" />
+                <ScalarProperty Name="NG_ID" ColumnName="NG_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tags">
+            <EntityTypeMapping TypeName="MyCms_DBModel.Tags">
+              <MappingFragment StoreEntitySet="Tags">
+                <ScalarProperty Name="Tag" ColumnName="Tag" />
+                <ScalarProperty Name="NewsID" ColumnName="NewsID" />
+                <ScalarProperty Name="TagID" ColumnName="TagID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

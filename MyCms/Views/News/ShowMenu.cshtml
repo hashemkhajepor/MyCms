@@ -1,0 +1,118 @@
+﻿@model IEnumerable<DataLayer.News_Groups>
+<nav class="primary-menu f-right">
+
+    <ul class="clearfix">
+        <li class="current drop">
+            <a href="#"> خانه</a>
+            <ul class="dropdown">
+                <li class="drop">
+                    <a href="#"> روزنامه </a>
+                    <ul class="dropdown level2">
+                        <li><a href="index.html"> روزنامه 1</a></li>
+                        <li><a href="index-3.html"> روزنامه 2</a></li>
+                        <li><a href="index-7.html"> روزنامه 3</a></li>
+                    </ul>
+                </li>
+                <li class="drop">
+                    <a href="#">مجلات </a>
+                    <ul class="dropdown level2">
+                        <li><a href="index-2.html">مجله 1</a></li>
+                        <li><a href="index-7.html">مجله 2</a></li>
+                        <li><a href="index-10.html"> مجله 3</a></li>
+                    </ul>
+                </li>
+                <li class="drop">
+                    <a href="#">وبلاگ ها</a>
+                    <ul class="dropdown level2">
+                        <li><a href="index-5.html">وبلاگ نمایش 1</a></li>
+                        <li><a href="index-6.html">وبلاگ نمایشی 2</a></li>
+                        <li><a href="index-8.html">وبلاگ نمایشی 3</a></li>
+                        <li><a href="index-9.html">وبلاگ نمایشی 4</a></li>
+                        <li><a href="index-11.html">وبلاگ نمایشی 5</a></li>
+                        <li><a href="index-12.html">وبلاگ نمایشی 6</a></li>
+                        <li><a href="index-13.html">وبلاگ نمایش 7</a></li>
+                        <li><a href="index-14.html">وبلاگ نمایشی  8</a></li>
+                    </ul>
+                </li>
+                <li><a href="index-17.html">سفر</a></li>
+                <li><a href="index-16.html">سبک زندگی</a></li>
+                <li><a href="index-17.html">ورزشی</a></li>
+            </ul>
+        </li>
+        @foreach (var item in Model.Where(g => g.ParentID == null))
+        {
+<li><a href="index-3.html">@item.GroupTitle</a></li>
+}
+
+
+
+
+
+    </ul>
+</nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<li class="drop">
+        <a href="#">وبلاگ</a>
+        <ul class="dropdown">
+            <li><a href="blog-single-image.html"> وبلاگ 1</a></li>
+            <li><a href="blog-single-image-2.html">وبلاگ 2</a></li>
+            <li><a href="blog-single-video.html"> ویدیو 1</a></li>
+            <li><a href="blog-single-video-2.html">ویدیو 2</a></li>
+            <li><a href="blog-single-audio.html">آهنگ 1</a></li>
+            <li><a href="blog-single-audio-2.html">آهنگ 2</a></li>
+        </ul>
+    </li>
+    <li class="drop">
+        <a href="#">صفحات</a>
+        <ul class="dropdown arrow-left">
+            <li class="drop">
+                <a href="#">وبلاگ</a>
+                <ul class="dropdown level2">
+                    <li><a href="blog-single-image.html"> وبلاگ 1</a></li>
+                    <li><a href="blog-single-image-2.html">وبلاگ 2</a></li>
+                    <li><a href="blog-single-video.html"> ویدیو 1</a></li>
+                    <li><a href="blog-single-video-2.html">ویدیو 2</a></li>
+                    <li><a href="blog-single-audio.html">آهنگ 1</a></li>
+                    <li><a href="blog-single-audio-2.html">آهنگ 2</a></li>
+
+                </ul>
+            </li>
+            <li><a href="archive.html">بایگانی 1</a></li>
+            <li><a href="archive-2.html">بایگانی 2</a></li>
+            <li><a href="contact.html">تماس 1</a></li>
+            <li><a href="contact-2.html">تماس 2</a></li>
+            <li><a href="registration.html">ثبت نام</a></li>
+            <li><a href="404.html">صفحه موجود نیست (404)</a></li>
+        </ul>
+    </li>*@
+@*<li class="drop">
+        <a href="#">خرید</a>
+        <ul class="dropdown arrow-left">
+            <li><a href="shop.html">خرید</a></li>
+            <li>
+                <a href="shop-details.html">
+                    جزییات
+                    خرید
+                </a>
+            </li>
+            <li><a href="cart.html">سبد خرید</a></li>
+        </ul>
+    </li>*@

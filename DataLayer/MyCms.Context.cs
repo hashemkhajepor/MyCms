@@ -27,5 +27,9 @@ namespace DataLayer
     
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<News_Groups> News_Groups { get; set; }
+        public virtual DbSet<News> News { get; set; }
+        public virtual DbSet<News_Selected_Groups> News_Selected_Groups { get; set; }
+        public virtual DbSet<Tags> Tags { get; set; }
     }
 }

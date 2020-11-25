@@ -1,4 +1,4 @@
-var Sliders = function () {
+﻿var Sliders = function () {
 
     // default sliders
     $("#default-slider").slider();
@@ -112,3 +112,5 @@ var Sliders = function () {
 
 
 }();
+
+
